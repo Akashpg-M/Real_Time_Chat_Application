@@ -1,4 +1,4 @@
-import Message from "../models/message.model";
+import Message from "../models/message.model.js";
 
 export const getUser = async(req, res) => {
   try{
@@ -31,7 +31,7 @@ export const getMessage = async(req, res) => {
   }
 }
 
-export const sendmessage = async(req, res) => {
+export const sendMessage = async(req, res) => {
   try{
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
