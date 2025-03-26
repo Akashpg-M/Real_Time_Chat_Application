@@ -3,26 +3,25 @@ import{useAuthStore } from "../store/useAuthStore";
 import{ Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import {Link} from "react-router-dom";
 
-import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
 const SignUpPage = (req, res) => {
   console.log("SignUp Page");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    userName: "",
     email: "",
     password: ""
   });
 
-  const { signup, isSigningUp } = useAuthStore();
+  const { signUp, isSigningUp } = useAuthStore();
 
   const validateForm = () => {
-    if(!formData.fullName.trim()) return toast.error("Full name is required");
+    if(!formData.userName.trim()) return toast.error("Full name is required");
     if(!formData.email.trim()) return toast.error("Email is required");
     if(!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
     if(!formData.password) return toast.error("Password is required");
-    if(!formData.password.length < 6) return toast.error("Password must be atleast 6 characters");
+    if(formData.password.length < 6) return toast.error("Password must be atleast 6 characters");
 
     return true;
   };
@@ -31,7 +30,7 @@ const SignUpPage = (req, res) => {
     e.preventDefault();
 
     const success = validateForm();
-    if(success === true) signup(formData);
+    if(success === true) signUp(formData);
   }
 
   return (
@@ -60,10 +59,10 @@ const SignUpPage = (req, res) => {
                 </div>
                 <input
                   type="text"
-                  classNmae={`input input-border w-full pl-10`}
+                  className={`input input-border w-full pl-10`}
                   placeholder="Name"
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value})}
+                  value={formData.userName}
+                  onChange={(e) => setFormData({ ...formData, userName: e.target.value})}
                   /> 
               </div>
             </div>
@@ -97,7 +96,7 @@ const SignUpPage = (req, res) => {
                 <input
                   type={showPassword ? "text" : "password"}
                   className={`input input-boarded w-full pl-10`}
-                  placeHolder="••••••••"
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   />
@@ -137,10 +136,6 @@ const SignUpPage = (req, res) => {
           </div>
         </div>
       </div>
-      <AuthImagePattern
-        title="join our community"
-        subtitle="connect with friends and family"
-      />
     </div>
   )
 };

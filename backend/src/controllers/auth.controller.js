@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.js";
 
 export const signUp = async(req, res) => {
+  console.log("Data: ", req.body);
   console.log("Signup route");
 
   const { userName, password, email} = req.body;
@@ -42,7 +43,6 @@ export const signUp = async(req, res) => {
     console.log("Error in SignUp controller", error.message);
     res.status(500).json({message: "Internal Server Error"});
   }
-  
 };
 
 export const login = async(req, res) => {
