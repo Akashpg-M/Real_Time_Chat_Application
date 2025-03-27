@@ -23,28 +23,33 @@ export const useAuthStore = create((set) => ({
   },
   
   signUp: async(data) => {
-    console.log("stateManagement Data: ", data);
+    console.log("stateManagement Data in signup: ", data);
 
     set({isSigningUp: true});
     try{
       const res=await axiosInstance.post("/auth/signup", data);
+      console.log("Signup frontend API Response:", res); // Debugging log
       set({authUser: res.data});
       toast.success("Account created Succesfully");
-      console.log("Error in signup:", error.message);
+      
     }catch(error){
-      console.log()
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Signup failed. Please try again.";
+      console.log("Error in signup:", error.message);
+      toast.error(errorMessage);
     }finally{
       set({isSigningUp: false});
     }
   },
 
   login : async(data) => {
+
     set({isLoggingIn: true});
     try{
       const res = await axiosInstance.post("/auth/login", data);
+      console.log("Data from login backend: ", res.data);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
+
     }catch(error){
       toast.error(error.response.data.message);
     }
@@ -73,6 +78,4 @@ export const useAuthStore = create((set) => ({
       set({isUpdatingProfile: false});
     }
   },
-
-  
 }));

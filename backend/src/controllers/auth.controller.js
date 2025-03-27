@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import cloudinary from "../lib/cloudinary.js";
 
 import { generateToken } from "../lib/utils.js";
 
@@ -14,6 +15,7 @@ export const signUp = async(req, res) => {
     }
 
     const user = await User.findOne({email});
+    
     if (user) return res.status(400).json({message: "Email already exist"});
 
     const salt = await bcrypt.genSalt(10);
@@ -25,17 +27,27 @@ export const signUp = async(req, res) => {
       password:hashedPassword
     })
 
+    const savedUser = await newUser.save();
+
     if(newUser) {
       //generate jwt token
-      generateToken(newUser._id, res)
-      await newUser.save();
+      generateToken(newUser._id, res);
 
-      res.status(201).json({
-        _id:newUser._id,
-        userName: newUser.email,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
-      });
+      if (savedUser) {
+        console.log("User successfully saved:", savedUser);
+  
+        generateToken(savedUser._id, res);
+  
+        return res.status(201).json({
+          _id: savedUser._id,
+          userName: savedUser.userName,
+          email: savedUser.email,
+          profilePic: savedUser.profilePic,
+        });
+      } else {
+        console.log("User not saved!");
+        return res.status(400).json({ message: "Invalid user data" });
+      }
     }else{
       res.status(400).json({message: "Invalid user data"});
     }
@@ -46,7 +58,7 @@ export const signUp = async(req, res) => {
 };
 
 export const login = async(req, res) => {
-  console.log("Signup route");
+  console.log("login route");
 
   const {email, password} = req.body;
   try{
@@ -59,7 +71,7 @@ export const login = async(req, res) => {
     generateToken(user._id, res);
 
     res.status(200).json({
-      _id: User._id,
+      _id: user._id,
       userName: user.userName,
       email: user.email,
       profilePic: user.profilePic
@@ -71,7 +83,6 @@ export const login = async(req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.send("sign up route");
   try{
     res.cookie("jwt", "", {maxAge:0});
     req.status(200).json({message:"Logged out Successfully"});
@@ -106,10 +117,11 @@ export const updateProfile = async(req, res) => {
 
 export const checkAuth = (req, res) => {
   try{
+    console.log("User from check auth: ", req.user);
     res.status(200).json(req.user);
   }catch(error){
     console.log("Error in checkauth Controller", error.message);
-    req.status(500).json({message: "Internal Server Error"});
+    res.status(500).json({message: "Internal Server Error"});
   }
 }
 

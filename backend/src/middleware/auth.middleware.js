@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 
 export const protectRoute = async(req, res, next) => {
   try{
-    console.log(req.cookies);
+    console.log("from protect route: ",req.cookies);
     const token = req.cookies.jwt;
 
     if(!token) return res.status(401).json({message: "Unauthorized - No token provided"});
@@ -14,7 +14,7 @@ export const protectRoute = async(req, res, next) => {
     const user = await User.findById(decode.userId).select("-password");
     if(!user) return res.status(404).json({message: "User not found"});
 
-    res.user = user;
+    req.user = user;
 
     next();
   }catch(error){

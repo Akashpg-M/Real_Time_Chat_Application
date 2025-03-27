@@ -11,11 +11,14 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const { login, isLoggingIn } = useAuthStore();
+  const { authUser, login, isLoggingIn } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData);
+    console.log("Form Data: ",formData);
+    await login(formData);
+    const updatedAuthUser = useAuthStore.getState().authUser;
+    console.log("Finally: ", updatedAuthUser);
   };
 
   return (
