@@ -20,7 +20,7 @@
 
 import Sidebar from "../components/Sidebar";
 import NoChatComponent from "../components/NoChatComponent";
-import ChatContainer from "../components/ChatContainer";
+import ChatComponent from "../components/ChatComponent";
 import { useChatStore } from "../store/useChatStore";
 
 const HomePage = () => {
@@ -32,7 +32,7 @@ const HomePage = () => {
         <div className="flex h-full rounded-lg overflow-hidden">
           <Sidebar />
           <div className="flex-1 flex items-center justify-center p-6">
-            {!selectedUser ? <NoChatComponent /> : <ChatContainer />}
+            {!selectedUser ? <NoChatComponent /> : <ChatComponent />}
             {/* <NoChatComponent /> */}
           </div>
         </div>
