@@ -7,43 +7,6 @@ const NavBar = () => {
   const {authUser, logout} = useAuthStore();
   
   return (
-    // <header className="bg-base-100  border-b border-base-300 fixed w-full top-0">
-    //   <div className="container mx-auto px-4 h-16">
-    //     <div className="flex items-center justify-between">
-    //       <div className="flex items-center gap-8">
-    //         <Link to='/' className="flex  gap-2.5 hover:opacity-80 transition-all">
-    //           <MessageSquare/>
-    //         </Link>
-    //         <h1 className="text-lg font-bold">ChatApp</h1>
-    //       </div>
-
-    //       <div className="flex items-center gap-2 transitoin-colors">
-    //         <Link
-    //           to={'/settings'}
-    //           className={'btn btn-sm gap-2 transition-colors'}
-    //         >
-    //           <Settings className="w-4 h-4"/>
-    //           <span className="hidden sm:inline">setting</span>    
-    //         </Link> 
-
-    //         {authUser && (
-    //           <>
-    //             <Link to={'/profile'} className={'btn btn-sm gap-2'}>
-    //               <User/>
-    //               <span className = "hidden sm:inline">Profile</span>
-    //             </Link>
-
-    //             <button className="flex gap-2 items-center" onClick={logout}>
-    //               <LogOut className="size-5"/>
-    //               <span className="hidden sm:inline">Logout</span>
-    //             </button>
-    //           </>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </header>
-
     <header className="bg-white border-b shadow-md fixed w-full top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         

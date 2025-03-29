@@ -22,11 +22,11 @@ export const getMessage = async(req, res) => {
     const message = await Message.find({
       $or: [
         {senderId: from_id, receiverId: to_id},
-        {senderId: to_id, receiver_id: from_id}
-      ]
+        {senderId: to_id, receiverId: from_id}
+      ],
     });
 
-    res.status(200).json(message)
+    res.status(200).json(message);
   }catch(error){
     console.log("Error in getMessage: ", error.message);
     res.status(500).json({error: "Internal Server Error"});
@@ -40,6 +40,7 @@ export const sendMessage = async(req, res) => {
     const senderId = req.user._id;
 
     let imageUrl;
+
     if(image){
       //Upload base64 image to cloudinary
       const uploadResponse = await cloudinary.uploader.upload(image);

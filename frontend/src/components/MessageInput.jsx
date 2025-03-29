@@ -1,104 +1,7 @@
-// import {useRef, useState} from "react";
-// import {Send, Image, X} from 'lucide-react';
-// import {useChatStore} from "../store/useChatStore";
-
-// const MessageInput = () => {
-//   const [text, setText] = useState("");
-//   const [image, setImage] = useState("");
-//   const fileInput = useRef(null);
-//   const {sendMessage} = useChatStore();
-  
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if(!file.type.startsWith("image/")){
-//       toast.error("Please select an image file");
-//       return;
-//     }
-    
-//     const imageUrl = URL.createObjectURL(file);
-//     setImage(imageUrl);
-//   }
-
-//   const removeImage = () => {
-//     setImage(null);
-//     if(fileInput.current) fileInput.current.value="";
-//   }
-
-//   const handleSendMessage = async(e) => {
-//     e.preventDefault();
-//     if(!text.trim() && !image) return;
-
-//     try{
-//       await sendMessage({
-//         text: text.trim(),
-//         image: imagePreview,
-//       });
-
-//       //clearing after input is send
-//       setText("");
-//       setImage(null);
-//       if(fileInput.current) fileInput.current.value = "";
-//     }catch(error){
-//       console.log('Faild to send Message');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       {image && (
-//         <div>
-//           <img src={image} alt="Preview" className="w-20 h-20 object-cover rounded-lg border"/>
-//           <button 
-//             onClick={removeImage}
-//             className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center"
-//             type='button'
-//           >
-//             <X className="size-3"/>
-//           </button>
-//         </div>
-//       )}
-
-//       <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-//         <div>
-//           <input  type="text" className="w-full input input-boardered rounded-lg input-sm"
-//             value={text}
-//             onChange={(e) => setText(e.target.value)}
-//           />
-//         </div>
-      
-//         <div>
-//           <input  
-//             type="file"
-//             accept="image/*"
-//             className="hidden"  //hideen and this state is managed by teh button compoenent which triggers this
-//             ref={fileInput}
-//             onChange={handleImageChange}
-//           />
-
-//           <button 
-//             type="button"
-//             className={'hidden ${imagePreview ? "text-emarald-500 : text-zinc-400'}
-//             onClick={() => fileInput.current?.click()}
-//           >
-//             <Image size={20} />
-//           </button>
-//         </div>
-
-//         <button type="submit" diabled={!text.trim() && !image}>
-//           <Send size={22}/>
-//         </button>
-
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default MessageInput;
-
-
 import { useRef, useState } from "react";
 import { Send, Image, X } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
+import toast from "react-hot-toast";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
@@ -108,12 +11,17 @@ const MessageInput = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
     }
-    const imageUrl = URL.createObjectURL(file);
-    setImage(imageUrl);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const removeImage = () => {

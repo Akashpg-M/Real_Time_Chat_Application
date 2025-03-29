@@ -1,101 +1,128 @@
 // import ChatHeader from "./ChatHeader";
 // import MessageInput from "./MessageInput";
-// import {useChatStore} from "../store/useChatStore";
-// import {useAuthStore} from "../store/useAuthStore";
+// import {useEffect } from "react";
+// import { useChatStore } from "../store/useChatStore";
+// import { useAuthStore } from "../store/useAuthStore";
+// import { Loader } from "lucide-react";
+
+// // import { formatMessageTime } from "../lib/utils";
+
 // const ChatComponent = () => {
-//   const {
-//     messages,
-//     getMessages,
-//     isMessagesLoading,
-//     selectedUser,
-//   } = useChatStore();
+//   const { messages, selectedUser, getMessages, isMessagesLoading } = useChatStore();
+//   const { authUser } = useAuthStore();
 
-//   const {authUser} = useAuthStore();
+//   if (!authUser || !selectedUser) {
+//     console.warn("⚠️ authUser or selectedUser is null. Showing Loader...");
+//     return <Loader />;
+//   }
+//   console.log("✅ authUser & selectedUser are ready:", authUser, selectedUser);
+
+//   useEffect(() => {
+//     console.log("🟡 useEffect triggered - Checking selectedUser...");
   
+//     if (selectedUser?._id) {
+//       console.log(`📩 Fetching messages for user: ${selectedUser._id}`);
+//       getMessages(selectedUser._id);
+//     } else {
+//       console.warn("⚠️ No selectedUser found. Skipping message fetch.");
+//     }
+//   }, [selectedUser, getMessages]);
 
-//   return(
-//     <div>
-//       <ChatHeader/>
-      
-//       <div>
-//         {messages.map((message) => (
-//           <div  
-//             key={message._id}
-//             className = {`chat ${message.senderId === authUser._id ? "chat-end":"chat-start"}`}
-//           >
-//             <img
-//               src = {
-//                 message.senderId === authUser._id ? authUser.profilePic || "/avatar.png" : selectedUser.profilePic || ".avatar.png"
-//               }
-//               alt="profile pic"
-//             />
-          
+//   return (
+//     <div className="flex flex-col h-full bg-white shadow-md rounded-lg overflow-hidden w-full ">
+//       {/* Chat Header (Top) */}
+//       <ChatHeader />
 
-//             <div>
-//               <time className="text-xs opacity-50 ml-1">
-//                 {formatMessageTime(message.vreatedAt)}
-//               </time>
+//       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-100">
+//         {messages.length === 0 && <p className="text-center text-gray-500">No messages yet</p>}
+//         {messages.map((message, index) => {
+//           console.log("📩 Rendering message:", message); // ✅ Debugging UI updates
+
+//           return (
+//             <div
+//               key={message._id || index}
+//               className={`flex w-full ${message.senderId === authUser._id ? "justify-end" : "justify-start"}`}
+//             >
+//               <div
+//                 className={`max-w-xs sm:max-w-md p-3 rounded-lg shadow-md ${
+//                   message.senderId === authUser._id ? "bg-white text-gray-800" : "bg-blue-500 text-white"
+//                 }`}
+//               >
+//                 {message.image && (
+//                   <img src={message.image} alt="Attachment" className="sm:max-w-[200px] rounded-md mb-2" />
+//                 )}
+//                 {message.text && <p>{message.text}</p>}
+//                 <time className="text-xs opacity-50 block mt-1">
+//                   {message.createdAt}
+//                 </time>
+//               </div>
 //             </div>
-
-          
-//             {message.image && (
-//               <img  
-//                 src={message.image}
-//                 alt="Attachment"
-//                 className="sm:max-w-[200px] rounded-md mb-2"
-//               />
-//             )}
-//             {message.text && <p>{message.text}</p>}
-//           </div>
-//         ))}
+//           );
+//         })}
 //       </div>
 
-//       <MessageInput/>
+
+//       {/* Message Input (Bottom Section) */}
+//       <MessageInput />
 //     </div>
-//   )
-// }
+//   );
+// };
 
 // export default ChatComponent;
 
+
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
+import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
+import { Loader } from "lucide-react";
 
 const ChatComponent = () => {
-  const { messages, selectedUser } = useChatStore();
+  const { messages, selectedUser, getMessages, isMessagesLoading } = useChatStore();
   const { authUser } = useAuthStore();
 
+  if (!authUser || !selectedUser) {
+    console.warn("⚠️ authUser or selectedUser is null. Showing Loader...");
+    return <Loader />;
+  }
+
+  console.log("✅ authUser & selectedUser are ready:", authUser, selectedUser);
+
+  useEffect(() => {
+    console.log("🟡 useEffect triggered - Checking selectedUser...");
+  
+    if (selectedUser?._id) {
+      console.log(`📩 Fetching messages for user: ${selectedUser._id}`);
+      getMessages(selectedUser._id);
+    } else {
+      console.warn("⚠️ No selectedUser found. Skipping message fetch.");
+    }
+  }, [selectedUser._id, getMessages]);
+
+  console.log("📩 Current messages in UI:", messages);
+
   return (
-    <div className="flex flex-col h-full bg-white shadow-md rounded-lg overflow-hidden">
-      {/* Chat Header (Top) */}
+    <div className="flex flex-col h-full bg-white shadow-md rounded-lg overflow-hidden w-full">
+      {/* Chat Header */}
       <ChatHeader />
 
-      {/* Chat Messages (Middle Section) */}
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-100">
         {messages.map((message) => (
-          <div
-            key={message._id}
-            className={`flex ${message.senderId === authUser._id ? "justify-end" : "justify-start"}`}
-          >
-            <div className="max-w-xs sm:max-w-md bg-white p-3 rounded-lg shadow-md">
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p className="text-gray-800">{message.text}</p>}
-              <time className="text-xs text-gray-500 block mt-1">
-                {formatMessageTime(message.createdAt)}
+            <div key={message._id} className={`flex w-full ${message.senderId === authUser._id ? "justify-end" : "justify-start"}`}>
+            <div  className={`max-w-xs sm:max-w-md p-3 rounded-lg shadow-md ${message.senderId === authUser._id ? "bg-white text-gray-800" : "bg-blue-500 text-white"}`}>
+              {message.image && (<img src={message.image} alt="Attachment" className="sm:max-w-[200px] rounded-md mb-2" />)}
+              {message.text && <p>{message.text}</p>}
+              <time className="text-xs opacity-50 block mt-1">
+                {new Date(message.createdAt).toLocaleTimeString()}
               </time>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Message Input (Bottom Section) */}
+      {/* Message Input */}
       <MessageInput />
     </div>
   );

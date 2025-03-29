@@ -22,68 +22,6 @@ const ProfilePage = () => {
   };
 
   return (
-    // <div>
-    //   <div>
-    //     <h1>Profile</h1>
-    //     <p>Your Profile Information</p>
-    //   </div>
-
-    //   <div>
-    //     <div>
-    //       <img  
-    //         src={selectedImage || authUser.profilePic || "/avatar.png"}
-    //         alt="profile"
-    //         className = "size-32 rounded-full object-cover border-4"
-    //       />
-
-    //       <label  
-    //         html="photo-upload" className="cursor-pointer"
-    //       >
-    //         <Camera/>
-    //         <input
-    //           id="photo-upload"
-    //           type="file"
-    //           accept="image/*"
-    //           onChange={handleImageUpload}
-    //           disabled={isUpdatingProfile}
-    //         />
-    //       </label>
-    //     </div>
-    //     <p>
-    //       {isUpdatingProfile ? "Uploading..." : "Click camera icon to update profile photo"}
-    //     </p>
-    //   </div>
-
-    //   <div className="">
-    //     <div>
-    //       <User className="w-4 h-4" />
-    //       Full Name
-    //     </div>
-    //     <p>{authUser?.email}</p>
-    //   </div>
-
-    //   <div>
-    //     <div>
-    //       <Mail/>
-    //       Email Address
-    //     </div>
-    //     <p>{authUser?.email}</p>
-    //   </div>
-
-    //   <div>
-    //     <h2>Account Information</h2>
-    //     <div>
-    //       <div>
-    //         <span>Memeber Since</span>
-    //         <span>{authUser.createdAt?.split("T")[0]}</span>
-    //       </div>
-    //       <div>
-    //         <span>Account Status</span>
-    //         <span>Active</span>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div className="h-screen pt-20">
       <div className="max-w-lg mx-auto bg-white shadow-lg rounded-xl p-6 space-y-6">
         {/* Profile Header */}
