@@ -1,6 +1,7 @@
 import User from "../models/user.model.js"
 import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import {getReceiverSocketId, io} from "../lib/socket.js";
 
 export const getUser = async(req, res) => {
   try{
@@ -52,11 +53,17 @@ export const sendMessage = async(req, res) => {
     });
 
     await newMessage.save();
-    // todo: realTime functionality goes here => socket.io
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if(receiverSocketId){
+      io.to(receiverSocketId).emit("get-Messages", newMessage); //emit sends to all online use to reduce to selecteduser
+    }
 
     res.status(201).json(newMessage);
+
   }catch(error){
     console.error("Error in sendMessage", error.message);
     res.status(500).json({error: "Internal Server Error"});
   }
 }
+

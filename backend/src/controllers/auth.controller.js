@@ -5,9 +5,6 @@ import cloudinary from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 
 export const signUp = async(req, res) => {
-  console.log("Data: ", req.body);
-  console.log("Signup route");
-
   const { userName, password, email} = req.body;
   try{
     if(password.length < 6) {
@@ -33,9 +30,7 @@ export const signUp = async(req, res) => {
       //generate jwt token
       generateToken(newUser._id, res);
 
-      if (savedUser) {
-        console.log("User successfully saved:", savedUser);
-  
+      if (savedUser) {  
         generateToken(savedUser._id, res);
   
         return res.status(201).json({
@@ -58,8 +53,6 @@ export const signUp = async(req, res) => {
 };
 
 export const login = async(req, res) => {
-  console.log("login route");
-
   const {email, password} = req.body;
   try{
     const user = await User.findOne({email});
@@ -69,6 +62,12 @@ export const login = async(req, res) => {
     if(!pass) return res.status(400).json({message: "Invalid Credentials"});
 
     generateToken(user._id, res);
+    // console.log(` From login Backend :\n
+    //   _id: ${user._id},
+    //   userName: ${user.userName},
+    //   email: ${user.email},
+    //   profilePic: ${user.profilePic}
+    // }`);
 
     res.status(200).json({
       _id: user._id,
@@ -124,4 +123,5 @@ export const checkAuth = (req, res) => {
     res.status(500).json({message: "Internal Server Error"});
   }
 }
+
 

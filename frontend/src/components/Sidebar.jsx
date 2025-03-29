@@ -97,7 +97,7 @@ const Sidebar = () => {
       {/* User List */}
       <div className="overflow-y-auto w-full py-3">
         {users.length > 0 ? (
-          users.map((user, index) => {
+          users.map((user) => {
             return (
               <button
                 key={user._id}
@@ -117,6 +117,7 @@ const Sidebar = () => {
                     alt={user.userName || user.fullName || "User"}
                     className="size-12 object-cover rounded-full"
                   />
+                  
                   {onlineUsers.includes(user._id) && (
                     <span
                       className="absolute bottom-0 right-0 size-3 bg-green-500 

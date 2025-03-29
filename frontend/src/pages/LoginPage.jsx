@@ -4,21 +4,17 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 
 const LoginPage = () => {
-  console.log("HomePage");
-
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { authUser, login, isLoggingIn } = useAuthStore();
+  const { login, isLoggingIn } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data: ",formData);
+    console.log("FormData: ",formData);
     await login(formData);
-    const updatedAuthUser = useAuthStore.getState().authUser;
-    console.log("Finally: ", updatedAuthUser);
   };
 
   return (
@@ -72,6 +68,7 @@ const LoginPage = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
