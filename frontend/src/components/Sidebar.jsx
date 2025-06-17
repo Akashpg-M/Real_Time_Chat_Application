@@ -1,78 +1,10 @@
-// import {useEffect} from "react";
-// import {useChatStore} from "../store/useChatStore";
-// import {Loader, Users} from "lucide-react";
-
-// const Sidebar = () => {
-//   const {getUsers, users, selectedUser, setSelectedUser, isUsersLoading} = useChatStore();
-
-//   const onlineUsers = [];
-
-//   useEffect(() => {
-//     getUsers()
-//   }, [getUsers])
-
-//   if(isUsersLoading) return <Loader/>
-
-//   return( 
-//     <aside className="w-full md:w-64 bg-white shadow-lg border-r p-4 flex flex-col">
-//       <div>
-//         <div className="flex items-center space-x-3 pb-4 border-b">
-//           <Users/>
-//           <span className="text-lg font-semibold">Contacts</span>
-//         </div>
-//       </div>
-
-//       <div className="overflow-y-auto w-full py-3">
-//         {users.map((user) => (
-//           <button
-//             key={user._id}
-//             onClick={() => setSelectedUser(user)}
-//             className={`
-//               w-full p-3 flex items-center gap-3
-//               hover:bg-base-300 transition-colors
-//               ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
-//             `}
-//           >
-//             <div className="relative mx-auto lg:mx-0">
-//               <img
-//                 src={user.profilePic || "/avatar.png"}
-//                 alt={user.userName || user.name}
-//                 className="size-12 object-cover rounded-full"
-//               />
-//               {onlineUsers.includes(user._id) && (
-//                 <span
-//                   className="absolute bottom-0 right-0 size-3 bg-green-500 
-//                   rounded-full ring-2 ring-zinc-900"
-//                 />
-//               )}
-//             </div>
-
-//             {/* User info - only visible on larger screens */}
-//             <div className="hidden lg:block text-left min-w-0">
-//               <div className="font-medium truncate">{user.fullName}</div>
-//               <div className="text-sm text-zinc-400">
-//                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
-//               </div>
-//             </div>
-//           </button>
-//         ))}
-
-//         {users.length === 0 && (
-//           <div className="text-center text-zinc-500 py-4">No online users</div>
-//         )}
-//       </div>
-//     </aside>
-//   );
-// }
-
-// export default Sidebar;
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Loader, Users } from "lucide-react";
 import {useAuthStore} from "../store/useAuthStore";
 
 const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+  const { getUsers, users, selectedUser, setSelectedUser, isUserLoading } = useChatStore();
   const {onlineUsers} = useAuthStore(); // TODO: Implement online status tracking
 
   useEffect(() => {
@@ -80,7 +12,7 @@ const Sidebar = () => {
   }, [getUsers]);
 
 
-  if (isUsersLoading) {
+  if (isUserLoading) {
     return <Loader />;
   }
 

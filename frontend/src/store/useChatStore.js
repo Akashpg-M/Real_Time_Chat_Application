@@ -14,9 +14,16 @@ export const useChatStore = create((set, get) => ({
   // for side bar
   getUsers: async() => {
     set({isUserLoading: true});
+
     try{
       const res = await axiosInstance.get("/messages/users");
-      set({users: res.data});
+      console.log("Server response:", res.data);
+      if (Array.isArray(res.data)) {
+        set({ users: res.data });
+      } else {
+        set({ users: [] });
+        toast.error("Invalid response format from server.");
+      }
     }catch(error){
       toast.error(error.response.data.message);
     } finally{
@@ -25,7 +32,7 @@ export const useChatStore = create((set, get) => ({
   },
 
   getMessages: async (userId) => {
-    set({ isMessagesLoading: true, messages: [] }); // ✅ Reset messages before fetching new ones
+    set({ isMessagesLoading: true, messages: [] });
   
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
@@ -51,8 +58,8 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       console.log("Message Sent, Server Response:", res.data);
   
-      set({ messages: [...messages, res.data] }); // ✅ Ensures reactivity
-      await get().getMessages(selectedUser._id); // ✅ Refresh messages after sending
+      set({ messages: [...messages, res.data] }); // Ensures reactivity
+      await get().getMessages(selectedUser._id); // Refresh messages after sending
   
     } catch (error) {
       console.error("Error sending message:", error.response?.data?.message || error.message);
